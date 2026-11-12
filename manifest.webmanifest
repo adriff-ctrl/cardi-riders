@@ -1,0 +1,14 @@
+{
+  "name": "CarDi Riders",
+  "short_name": "CarDi Riders",
+  "description": "Rutas en moto de Carmen y Diego",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#232527",
+  "theme_color": "#2E3134",
+  "lang": "es",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
