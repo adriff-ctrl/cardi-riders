@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CarDi Riders</title>
+<meta name="theme-color" content="#2E3134">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CarDi Riders">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;700&family=Big+Shoulders+Display:wght@900&display=swap" rel="stylesheet">
+<style>
+  html,body{height:100%;margin:0}
+  body{background:#232527;color:#D7DADD;font-family:Barlow,system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:24px;box-sizing:border-box}
+  img{width:min(60vw,260px);height:auto}
+  h1{font:900 40px/1 'Big Shoulders Display',Impact,sans-serif;margin:0}
+  p{margin:0;max-width:330px;line-height:1.5;color:#9AA1A8}
+  .linea{width:180px;height:4px;background:repeating-linear-gradient(90deg,#F2B33D 0 22px,transparent 22px 36px)}
+  .btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px}
+  button,a.btn{border:0;font:inherit;font-weight:700;font-size:17px;padding:14px 26px;border-radius:12px;text-decoration:none;cursor:pointer}
+  #instalar{background:#F2B33D;color:#2a1d05}
+  a.btn{background:#3A3E42;color:#D7DADD;border:1px solid #4A4F55}
+</style>
+</head>
+<body>
+  <img src="logo.svg" alt="Logo CarDi Riders">
+  <h1>CarDi Riders</h1>
+  <div class="linea"></div>
+  <p id="msg">Para instalarla: en Android, menú ⋮ de Chrome y «Instalar aplicación». En iPhone, en Safari, botón Compartir y «Añadir a pantalla de inicio».</p>
+  <div class="btns">
+    <button id="instalar" hidden>Instalar CarDi Riders</button>
+    <a class="btn" id="go" href="#">Abrir la app</a>
+  </div>
+<script>
+  var URL_APP = 'https://script.google.com/macros/s/AKfycbyg-NKh_EEofPLvwFFvw8wU2VM2G70CxmWZQUOuEzamkrh-I2fENKOSyafA2CRskPSBNg/exec';
+
+  document.getElementById('go').href = URL_APP;
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+
+  // Solo la app instalada salta a Google; en el navegador se queda aquí para que Chrome pueda instalarla con su icono.
+  var instalada = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  if (instalada) {
+    document.getElementById('msg').textContent = 'Arrancando…';
+    document.getElementById('go').hidden = true;
+    location.replace(URL_APP);
+  }
+
+  var aviso;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault(); aviso = e;
+    document.getElementById('instalar').hidden = false;
+    document.getElementById('msg').textContent = 'Instálala para tenerla en la pantalla de inicio con su icono.';
+  });
+  document.getElementById('instalar').onclick = function () {
+    if (!aviso) return;
+    aviso.prompt();
+    aviso.userChoice.then(function () { aviso = null; document.getElementById('instalar').hidden = true; });
+  };
+  window.addEventListener('appinstalled', function () {
+    document.getElementById('msg').textContent = 'Instalada. Ábrela desde el icono de CarDi Riders.';
+  });
+</script>
+</body>
+</html>
